@@ -20,6 +20,9 @@ return require('packer').startup(function(use)
   use 'rafamadriz/friendly-snippets'
   -- lspkind
   use 'onsails/lspkind-nvim'
+  
+  -- 注释插件
+  use { 'numToStr/Comment.nvim' }
 
   -- colortheme
   use { 'ellisonleao/gruvbox.nvim' }
@@ -30,6 +33,10 @@ return require('packer').startup(function(use)
     requires = { 'nvim-tree/nvim-web-devicons', opt = true }
   }
 
-  -- 注释插件
-  use { 'numToStr/Comment.nvim' }
+  -- buffer line
+  use { 'akinsho/bufferline.nvim', tag = "*", requires = 'nvim-tree/nvim-web-devicons' }
+
+  -- 文件树
+  use { 'nvim-tree/nvim-tree.lua' }
+  use { 'nvim-tree/nvim-web-devicons' }
 end)

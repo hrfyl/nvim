@@ -9,3 +9,9 @@ require('plugins/lualine')
 
 -- 加载Comment插件
 require('plugins/comment')
+
+-- 加载bufferline插件
+require('plugins/bufferline')
+
+-- 加载nvim-tree插件
+require('plugins/nvim-tree')

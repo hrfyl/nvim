@@ -20,4 +20,13 @@ return require('packer').startup(function(use)
   use 'rafamadriz/friendly-snippets'
   -- lspkind
   use 'onsails/lspkind-nvim'
+
+  -- colortheme
+  use { 'ellisonleao/gruvbox.nvim' }
+
+  -- 状态栏
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+  }
 end)

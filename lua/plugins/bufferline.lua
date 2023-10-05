@@ -104,3 +104,9 @@ require("bufferline").setup {
     -- end
   }
 }
+
+-- keybindings
+vim.keymap.set('n', '<leader>bpc', ':BufferLinePickClose<CR>')
+vim.keymap.set('n', '<leader>bhc', ':BufferLineCloseLeft<CR>')
+vim.keymap.set('n', '<leader>blc', ':BufferLineCloseRight<CR>')
+vim.keymap.set('n', '<leader>boc', ':BufferLineCloseOthers<CR>')

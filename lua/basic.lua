@@ -34,8 +34,8 @@ vim.opt.smartindent   = true
 vim.opt.smartcase     = true
 vim.opt.ignorecase    = true
 
--- 搜索不要高亮
-vim.opt.hlsearch      = false
+-- 搜索高亮
+vim.opt.hlsearch      = true
 
 -- 边输入边搜索
 vim.opt.incsearch     = true

@@ -1,30 +1,27 @@
--- basic
-require('gui')              -- GUI配置
+--- font size
+vim.g.gui_font_default_size = 10
+vim.g.gui_font_size = vim.g.gui_font_default_size
+vim.g.gui_font_face = "Microsoft YaHei Mono"
+-- vim.g.gui_font_face = "Source Code Pro"
 
--- gruvbox主题配置
-require("gruvbox").setup({
-  terminal_colors = true, -- add neovim terminal colors
-  undercurl = true,
-  underline = true,
-  bold = true,
-  italic = {
-    strings = true,
-    emphasis = true,
-    comments = true,
-    operators = false,
-    folds = true,
-  },
-  strikethrough = true,
-  invert_selection = false,
-  invert_signs = false,
-  invert_tabline = false,
-  invert_intend_guides = false,
-  inverse = true, -- invert background for search, diffs, statuslines and errors
-  contrast = "", -- can be "hard", "soft" or empty string
-  palette_overrides = {},
-  overrides = {},
-  dim_inactive = false,
-  transparent_mode = false,
-})
-vim.o.background = "dark" -- or "light" for light mode
-vim.cmd([[colorscheme gruvbox]]) -- gruvbox
+RefreshGuiFont = function()
+    vim.opt.guifont = string.format("%s:h%s", vim.g.gui_font_face, vim.g.gui_font_size)
+end
+
+ResizeGuiFont = function(delta)
+    vim.g.gui_font_size = vim.g.gui_font_size + delta
+    RefreshGuiFont()
+end
+
+ResetGuiFont = function()
+    vim.g.gui_font_size = vim.g.gui_font_default_size
+    RefreshGuiFont()
+end
+
+ResetGuiFont()
+
+-- Keymaps
+local opts = { noremap = true, silent = true }
+vim.keymap.set('n', '<leader>fd', function() ResetGuiFont() end, opts)
+vim.keymap.set('n', '<leader>f+', function() ResizeGuiFont(1) end, opts)
+vim.keymap.set('n', '<leader>f-', function() ResizeGuiFont(-1) end, opts)

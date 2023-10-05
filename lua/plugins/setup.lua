@@ -6,3 +6,6 @@ require('plugins/gruvbox')
 
 -- 加载lualine插件
 require('plugins/lualine')
+
+-- 加载Comment插件
+require('plugins/comment')

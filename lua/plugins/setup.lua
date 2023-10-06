@@ -15,3 +15,7 @@ require('plugins/bufferline')
 
 -- 加载nvim-tree插件
 require('plugins/nvim-tree')
+
+-- 加载lsp插件
+require('plugins/mason')
+require('plugins/mason-lspconfig')

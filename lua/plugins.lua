@@ -39,4 +39,11 @@ return require('packer').startup(function(use)
   -- 文件树
   use { 'nvim-tree/nvim-tree.lua' }
   use { 'nvim-tree/nvim-web-devicons' }
+
+  -- lsp
+  use {
+    'williamboman/mason.nvim',
+    'williamboman/mason-lspconfig.nvim',
+    'neovim/nvim-lspconfig',
+  }
 end)

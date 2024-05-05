@@ -23,6 +23,7 @@ local on_attach = function(client, bufnr)
 
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local bufopts = { noremap = true, silent = true, buffer = bufnr }
+
     vim.keymap.set('n', '<leader>jh', vim.lsp.buf.declaration, bufopts)
     vim.keymap.set('n', '<leader>jd', vim.lsp.buf.definition, bufopts)
     vim.keymap.set('n', '<leader>jK', vim.lsp.buf.hover, bufopts)
@@ -33,11 +34,28 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', '<leader>wl', function()
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, bufopts)
-    vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts)
+    vim.keymap.set('n', '<leader>gc', vim.lsp.buf.type_definition, bufopts)
+    vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, bufopts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
     vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
-    vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, bufopts)
-    vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+    vim.keymap.set('n', '<leader>ff', function() vim.lsp.buf.format { async = true } end, bufopts)
+
+    -- lookup 'which-key'
+    local wk = require("which-key")
+    wk.register({
+      ["<leader>jk"] = "hover",
+      ["<leader>jd"] = "definition",
+      ["<leader>jh"] = "declaration",
+      ["<leader>ji"] = "implementation",
+      ["<leader>wa"] = "add_workspace_folder",
+      ["<leader>wr"] = "remove_workspace_folder",
+      ["<leader>wl"] = "list_workspace_folders",
+      ["<leader>gr"] = "references",
+      ["<leader>gc"] = "type_definition",
+      ["<leader>rn"] = "rename",
+      ["<leader>ca"] = "code_action",
+      ["<leader>ff"] = "format file",
+  })
 end
 
 lspconfig.pylsp.setup({

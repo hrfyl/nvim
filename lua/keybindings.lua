@@ -15,8 +15,9 @@ wk.register({
     c = { name = "+close" },
   },
   t = { name = "+tab-tree" },
-  w = { name = "+window" },
-  c = { name = "+comment" },
+  w = { name = "+window-workspace" },
+  c = { name = "+comment-code" },
+  r = { name = "+rename-remove" },
 }, { prefix = "<leader>" })
 
 vim.keymap.set('i', 'fd', '<esc>')

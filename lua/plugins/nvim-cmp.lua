@@ -1,14 +1,42 @@
 -- nvim-cmp
 return {
   -- cmp-source
-  { "hrsh7th/cmp-nvim-lsp", name = "nvim_lsp" },
   { "hrsh7th/cmp-buffer", name = "buffer" },
   { "hrsh7th/cmp-path", name = "path" },
   { "hrsh7th/cmp-cmdline", name = "cmdline" },
+  { "hrsh7th/cmp-nvim-lsp", name = "nvim_lsp" },
   -- vsnip
   { "hrsh7th/cmp-vsnip", name = "vsnip" },
-  { "hrsh7th/vim-vsnip" },
-  { "rafamadriz/friendly-snippets" },
+  -- luasnip
+  { "saadparwaiz1/cmp_luasnip" },
+  {
+    "L3MON4D3/LuaSnip",
+    build = vim.fn.has "win32" ~= 0 and "make install_jsregexp" or nil,
+    dependencies = {
+      "rafamadriz/friendly-snippets",
+      "benfowler/telescope-luasnip.nvim",
+    },
+    config = function(_, opts)
+      if opts then require("luasnip").config.setup(opts) end
+      vim.tbl_map(
+        function(type) require("luasnip.loaders.from_" .. type).lazy_load() end,
+        { "vscode", "snipmate", "lua" }
+      )
+      -- friendly-snippets - enable standardized comments snippets
+      require("luasnip").filetype_extend("c", { "cdoc" })
+      require("luasnip").filetype_extend("cpp", { "cppdoc" })
+      require("luasnip").filetype_extend("go", { "godoc" })
+      require("luasnip").filetype_extend("sh", { "shelldoc" })
+      require("luasnip").filetype_extend("lua", { "luadoc" })
+      require("luasnip").filetype_extend("python", { "pydoc" })
+      -- require("luasnip").filetype_extend("rust", { "rustdoc" })
+      -- require("luasnip").filetype_extend("cs", { "csharpdoc" })
+      -- require("luasnip").filetype_extend("java", { "javadoc" })
+      -- require("luasnip").filetype_extend("kotlin", { "kdoc" })
+      -- require("luasnip").filetype_extend("ruby", { "rdoc" })
+      -- require("luasnip").filetype_extend("php", { "phpdoc" })
+    end,
+  },
   -- lspkind
   { "onsails/lspkind-nvim" },
   -- nvim-cmp configure
@@ -18,7 +46,7 @@ return {
     config = function()
       local cmp = require('cmp')
       local lspkind = require('lspkind')
-      
+
       cmp.setup {
         -- 指定 snippet 引擎
         snippet = {
@@ -26,7 +54,7 @@ return {
             -- For `vsnip` users.
             vim.fn["vsnip#anonymous"](args.body)
             -- For `luasnip` users.
-            -- require('luasnip').lsp_expand(args.body)
+            require('luasnip').lsp_expand(args.body)
             -- For `ultisnips` users.
             -- vim.fn["UltiSnips#Anon"](args.body)
             -- For `snippy` users.
@@ -39,7 +67,7 @@ return {
           -- For vsnip users.
           { name = 'vsnip' },
           -- For luasnip users.
-          -- { name = 'luasnip' },
+          { name = 'luasnip' },
           -- For ultisnips users.
           -- { name = 'ultisnips' },
           -- For snippy users.

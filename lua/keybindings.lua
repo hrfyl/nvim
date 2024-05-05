@@ -2,22 +2,23 @@
 local wk = require("which-key")
 
 wk.register({
-  h = { name = "+highlight" },
-  f = { name = "+file-font" },
-  g = { name = "+goto" },
-  j = { name = "+jump" },
-  s = {
-    name = "+search-set",
-    n = { name = "+no" },
-  },
   b = {
     name = "+buffer",
     c = { name = "+close" },
   },
+  c = { name = "+comment-code" },
+  f = { name = "+file-font" },
+  g = { name = "+goto" },
+  h = { name = "+highlight" },
+  j = { name = "+jump" },
+  l = { name = "+lookup" },
+  r = { name = "+rename-remove" },
+  s = {
+    name = "+search-set",
+    n = { name = "+no" },
+  },
   t = { name = "+tab-tree" },
   w = { name = "+window-workspace" },
-  c = { name = "+comment-code" },
-  r = { name = "+rename-remove" },
 }, { prefix = "<leader>" })
 
 vim.keymap.set('i', 'fd', '<esc>')

@@ -48,10 +48,11 @@ return {
 
     -- register keymaps
     require('which-key').register({
-      ["<leader>ff"] = { "<cmd>Telescope find_files<cr>", "find_file" },
-      ["<leader>fg"] = { "<cmd>Telescope live_grep<cr>", "live_grep" },
-      ["<leader>fb"] = { "<cmd>Telescope buffers<cr>", "find_buffer"},
-      ["<leader>fh"] = { "<cmd>Telescope help_tags<cr>", "help_tags" },
+      ["<leader>lf"] = { "<cmd>Telescope find_files<cr>", "find_file" },
+      ["<leader>lg"] = { "<cmd>Telescope live_grep<cr>", "live_grep" },
+      ["<leader>lb"] = { "<cmd>Telescope buffers<cr>", "find_buffer"},
+      ["<leader>lh"] = { "<cmd>Telescope help_tags<cr>", "help_tags" },
+      ["<leader>ls"] = { "<cmd>Telescope lsp_document_symbols<cr>", "lookup_symbols" },
     })
   end,
 }

@@ -26,10 +26,8 @@ local opts = { noremap = true, silent = true }
 -- vim.keymap.set('n', '<leader>f+', function() ResizeGuiFont(1) end, opts)
 -- vim.keymap.set('n', '<leader>f-', function() ResizeGuiFont(-1) end, opts)
 local wk = require("which-key")
-wk.register({
-  f = {
-    d = { function() ResetGuiFont() end, "reset font" },
-    k = { function() ResetGuiFont(1) end, "font size +" },
-    j = { function() ResetGuiFont(-1) end, "font size -" },
-  }
-}, { prefix = "<leader>" })
+wk.add({
+  { "<leader>fd", function() ResetGuiFont() end, desc = "reset font" },
+  { "<leader>fk", function() ResetGuiFont(1) end, desc = "font size +" },
+  { "<leader>fj", function() ResetGuiFont(-1) end, desc = "font size -" },
+})

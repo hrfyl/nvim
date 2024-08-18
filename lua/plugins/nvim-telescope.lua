@@ -47,12 +47,12 @@ return {
     teles.load_extension('luasnip')
 
     -- register keymaps
-    require('which-key').register({
-      ["<leader>lf"] = { "<cmd>Telescope find_files<cr>", "find_file" },
-      ["<leader>lg"] = { "<cmd>Telescope live_grep<cr>", "live_grep" },
-      ["<leader>lb"] = { "<cmd>Telescope buffers<cr>", "find_buffer"},
-      ["<leader>lh"] = { "<cmd>Telescope help_tags<cr>", "help_tags" },
-      ["<leader>ls"] = { "<cmd>Telescope lsp_document_symbols<cr>", "lookup_symbols" },
+    require('which-key').add({
+      { "<leader>lf", "<cmd>Telescope find_files<cr>", desc = "find_file" },
+      { "<leader>lg", "<cmd>Telescope live_grep<cr>", desc = "live_grep" },
+      { "<leader>lb", "<cmd>Telescope buffers<cr>", desc = "find_buffer"},
+      { "<leader>lh", "<cmd>Telescope help_tags<cr>", desc = "help_tags" },
+      { "<leader>ls", "<cmd>Telescope lsp_document_symbols<cr>", desc = "lookup_symbols" },
     })
   end,
 }

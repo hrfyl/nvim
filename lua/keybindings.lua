@@ -1,25 +1,21 @@
 -- load which-key
 local wk = require("which-key")
 
-wk.register({
-  b = {
-    name = "+buffer",
-    c = { name = "+close" },
-  },
-  c = { name = "+comment-code" },
-  f = { name = "+file-font" },
-  g = { name = "+goto" },
-  h = { name = "+highlight" },
-  j = { name = "+jump" },
-  l = { name = "+lookup" },
-  r = { name = "+rename-remove" },
-  s = {
-    name = "+search-set",
-    n = { name = "+no" },
-  },
-  t = { name = "+tab-tree" },
-  w = { name = "+window-workspace" },
-}, { prefix = "<leader>" })
+wk.add({
+  { "<leader>b", group = "+buffer" },
+  { "<leader>bc", group = "+close" },
+  { "<leader>c", group = "+comment-code" },
+  { "<leader>f", group = "+file-font" },
+  { "<leader>g", group = "+goto" },
+  { "<leader>h", group = "+highlight" },
+  { "<leader>j", group = "+jump" },
+  { "<leader>l", group = "+lookup" },
+  { "<leader>r", group = "+rename-remove" },
+  { "<leader>s", group = "+search-set" },
+  { "<leader>sn", group = "+no" },
+  { "<leader>t", group = "+tab-tree" },
+  { "<leader>w", group = "+window-workspace" },
+})
 
 vim.keymap.set('i', 'fd', '<esc>')
 
@@ -42,28 +38,24 @@ vim.keymap.set('v', 'L', '$')
 -- -- 高亮当前行
 -- vim.keymap.set('n', '<leader>hl', ':set cul!<CR>')
 -- vim.keymap.set('n', '<leader>hc', ':set cuc!<CR>')
-wk.register({
-  h = {
-    l = { ":set cul!<cr>", "hightlight line" },
-    c = { ":set cuc!<cr>", "hightlight word" }
-  }
-}, { prefix = "<leader>" })
+wk.add({
+  { "<leader>hl", ":set cul!<cr>", desc = "hightlight line" },
+  { "<leader>hc", ":set cuc!<cr>", desc = "hightlight word" },
+})
 
 -- vim.keymap.set('n', '<leader>fs', ':w<CR>')
 -- vim.keymap.set('n', '<leader>fw', ':w<CR>')
-wk.register({
-  f = {
-    s = { ":w<cr>", "save file" },
-    w = { ":w<cr>", "write file" }
-  }
-}, { prefix = "<leader>" })
+wk.add({
+  { "<leader>fs", ":w<cr>", desc = "save file" },
+  { "<leader>fs", ":w<cr>", desc = "write file" },
+})
 
 -- -- quit normal mode
 -- vim.keymap.set('n', '<leader>q', ':q<CR>')
 -- vim.keymap.set('n', '<leader>Q', ':qa!<CR>')
-wk.register({
-  ["<leader>q"] = { ":q<cr>", "quit" },
-  ["<leader>Q"] = { ":qa!<cr>", "quit without save" },
+wk.add({
+  { "<leader>q", ":q<cr>", desc = "quit" },
+  { "<leader>Q", ":qa!<cr>", desc = "quit without save" },
 })
 
 -- -- insert mode shortcut
@@ -78,13 +70,11 @@ vim.keymap.set('i', '<C-d>', '<delete>')    -- delete
 -- vim.keymap.set('n', '<leader>gd', '<C-]>')  -- goto definition
 -- vim.keymap.set('n', '<leader>gh', '<C-o>')  -- backward
 -- vim.keymap.set('n', '<leader>gl', '<C-i>')  -- forward
-wk.register({
-  g = {
-    d = { "<C-]>", "goto definition" },
-    h = { "<C-o>", "backward" },
-    l = { "<C-i>", "forward" },
-  }
-}, { prefix = "<leader>" })
+wk.add({
+  { "<leader>gd", "<C-]>", desc = "goto definition" },
+  { "<leader>gh", "<C-o>", desc = "backward" },
+  { "<leader>gl", "<C-i>", desc = "forward" },
+})
 
 -- 搜索居中
 vim.keymap.set('n', 'n', 'nzz')
@@ -95,50 +85,40 @@ vim.keymap.set('n', '#', '#zz')
 -- -- search
 -- vim.keymap.set('n', '<leader>/', '/')
 -- vim.keymap.set('n', '<leader>sc', ':set nohlsearch<CR>')
-wk.register({
-  ["<leader>/"] = { "/", "goto search" },
+wk.add({
+  { "<leader>/", "/", desc = "goto search" },
+  { "<leader>sc", ":set nohlsearch<cr>", desc = "set nohlsearch" },
 })
-wk.register({
-  s = {
-    c = { ":set nohlsearch<cr>", "set nohlsearch" },
-  }
-}, { prefix = "<leader>" })
 
 -- -- paste mode
 -- vim.keymap.set('n', '<leader>sp', ':set paste<CR>')
 -- vim.keymap.set('n', '<leader>snp', ':set nopaste<CR>')
-wk.register({
-  s = {
-    p = { ":set paste<cr>", "set paste" },
-    np = { ":set nopaste<cr>", "set nopaste" },
-  }
-}, { prefix = "<leader>" })
+wk.add({
+  { "<leader>sp", ":set paste<cr>", desc = "set paste" },
+  { "<leader>snp", ":set nopaste<cr>", desc = "set nopaste" },
+})
 
 -- -- buffer operation
 -- vim.keymap.set('n', '<leader>bn', ':bnext<CR>')      -- buffer next
 -- vim.keymap.set('n', '<leader>bp', ':bprevious<CR>')  -- buffer previous
 -- vim.keymap.set('n', '<leader>bd', ':bdelete<CR>')    -- buffer delete
-wk.register({
-  b = {
-    n = { ":bnext<cr>", "buffer next" },
-    p = { ":bprevious<cr>", "buffer previous" },
-    d = { ":bdelete<cr>", "buffer close" },
-    cc = { ":bdelete<cr>", "buffer close" },
-  }
-}, { prefix = "<leader>" })
+wk.add({
+  { "<leader>bn", ":bnext<cr>", desc = "buffer next" },
+  { "<leader>bp", ":bprevious<cr>", desc = "buffer previous" },
+  { "<leader>bd", ":bdelete<cr>", desc = "buffer close" },
+  { "<leader>bcc", ":bdelete<cr>", desc = "buffer close" },
+})
 
 -- -- tab operation
 -- vim.keymap.set('n', '<leader>tn', ':tabnext<CR>')     -- tab next
 -- vim.keymap.set('n', '<leader>tp', ':tabprevious<CR>') -- tab previous
 -- vim.keymap.set('n', '<leader>td', ':tabclose<CR>')    -- tab close
-wk.register({
-  t = {
-    n = { ":tabnext<cr>", "tab next" },
-    p = { ":tabprevious<cr>", "tab previous" },
-    d = { ":tabclose<cr>", "tab close" },
-    c = { ":tabclose<cr>", "tab close" },
-  }
-}, { prefix = "<leader>" })
+wk.add({
+  { "<leader>tn", ":tabnext<cr>", desc = "tab next" },
+  { "<leader>tp", ":tabprevious<cr>", desc = "tab previous" },
+  { "<leader>td", ":tabclose<cr>", desc = "tab close" },
+  { "<leader>tc", ":tabclose<cr>", desc = "tab close" },
+})
 
 -- -- window operation
 -- vim.keymap.set('n', '<leader>ww', '<C-w>w')   -- other window
@@ -151,17 +131,15 @@ wk.register({
 -- vim.keymap.set('n', '<leader>w-', '<C-w>-')   -- split window below
 -- vim.keymap.set('n', '<leader>wv', '<C-w>v')   -- split window right
 -- vim.keymap.set('n', '<leader>w|', '<C-w>|')   -- split window right
-wk.register({
-  w = {
-    w = { "<C-w>w", "other window" },
-    d = { "<C-w>c", "close window" },
-    c = { "<C-w>c", "close window" },
-    j = { "<C-w>j", "window below" },
-    h = { "<C-w>h", "window left" },
-    l = { "<C-w>l", "window right" },
-    s = { "<C-w>s", "split window below" },
-    -- - = { "<C-w>-", "split window below" },
-    v = { "<C-w>v", "split window right" },
-    -- | = { "<C-w>|", "split window right" },
-  }
-}, { prefix = "<leader>" })
+wk.add({
+  { "<leader>ww", "<C-w>w", desc = "other window" },
+  { "<leader>wd", "<C-w>c", desc = "close window" },
+  { "<leader>wc", "<C-w>c", desc = "close window" },
+  { "<leader>wj", "<C-w>j", desc = "window below" },
+  { "<leader>wh", "<C-w>h", desc = "window left" },
+  { "<leader>wl", "<C-w>l", desc = "window right" },
+  { "<leader>ws", "<C-w>s", desc = "split window below" },
+  { "<leader>w-", "<C-w>-", desc = "split window below" },
+  { "<leader>wv", "<C-w>v", desc = "split window right" },
+  { "<leader>w|", "<C-w>|", desc = "split window right" },
+})

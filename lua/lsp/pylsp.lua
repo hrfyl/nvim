@@ -42,19 +42,19 @@ local on_attach = function(client, bufnr)
 
     -- lookup 'which-key'
     local wk = require("which-key")
-    wk.register({
-      ["<leader>jk"] = "hover",
-      ["<leader>jd"] = "definition",
-      ["<leader>jh"] = "declaration",
-      ["<leader>ji"] = "implementation",
-      ["<leader>wa"] = "add_workspace_folder",
-      ["<leader>wr"] = "remove_workspace_folder",
-      ["<leader>wl"] = "list_workspace_folders",
-      ["<leader>gr"] = "references",
-      ["<leader>gc"] = "type_definition",
-      ["<leader>rn"] = "rename",
-      ["<leader>ca"] = "code_action",
-      ["<leader>ff"] = "format file",
+    wk.add({
+      { "<leader>jk", desc = "hover" },
+      { "<leader>jd", desc = "definition" },
+      { "<leader>jh", desc = "declaration" },
+      { "<leader>ji", desc = "implementation" },
+      { "<leader>wa", desc = "add_workspace_folder" },
+      { "<leader>wr", desc = "remove_workspace_folder" },
+      { "<leader>wl", desc = "list_workspace_folders" },
+      { "<leader>gr", desc = "references" },
+      { "<leader>gc", desc = "type_definition" },
+      { "<leader>rn", desc = "rename" },
+      { "<leader>ca", desc = "code_action" },
+      { "<leader>ff", desc = "format file" },
   })
 end
 

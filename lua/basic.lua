@@ -16,7 +16,7 @@ end
 vim.g.mapleader = ' '
 
 -- utf-8
-vim.g.encoding       = "UTF-8"
+vim.g.encoding       = "utf-8"
 vim.opt.fileencoding = 'utf-8'
 
 -- jk移动光标时上下保留5行

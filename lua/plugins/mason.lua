@@ -1,13 +1,10 @@
 -- load configure
 local config = require('utils/config')
 
-local lsp_plugins = {"pylsp", "gopls"}
+local lsp_plugins = {'lua_ls', "pylsp", "gopls"}
 if config.arch_is_x86 then
-    table.insert(lsp_plugins, 'lua')
     table.insert(lsp_plugins, 'clangd')
 else -- if config.arch_is_arm then
-    -- lua_ls 3.7.4 之后不支持arm平台
-    table.insert(lsp_plugins, 'lua_ls@3.7.4')
     -- arm不支持clangd
     -- table.insert(lsp_plugins, 'clangd')
 end

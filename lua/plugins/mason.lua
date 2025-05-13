@@ -1,3 +1,17 @@
+-- load configure
+local config = require('utils/config')
+
+local lsp_plugins = {"pylsp", "gopls"}
+if config.arch_is_x86 then
+    table.insert(lsp_plugins, 'lua')
+    table.insert(lsp_plugins, 'clangd')
+else -- if config.arch_is_arm then
+    -- lua_ls 3.7.4 之后不支持arm平台
+    table.insert(lsp_plugins, 'lua_ls@3.7.4')
+    -- arm不支持clangd
+    -- table.insert(lsp_plugins, 'clangd')
+end
+
 -- mason
 return {
   { -- config mason
@@ -144,8 +158,7 @@ return {
       -- A list of servers to automatically install if they're not already installed. Example: { "rust_analyzer@nightly", "lua_ls" }
       -- This setting has no relation with the `automatic_installation` setting.
       ---@type string[]
-      -- lua_ls 3.7.4 之后不支持arm平台
-      ensure_installed = { "lua_ls@3.7.4", "pylsp", "gopls" },
+      ensure_installed = lsp_plugins,
       -- ensure_installed = { "lua_ls", "clangd", "pylsp", "gopls"},
 
       -- Whether servers that are set up (via lspconfig) should be automatically installed if they're not already installed.

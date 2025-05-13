@@ -1,3 +1,6 @@
+-- 加载配置文件
+local config = require('utils/config')
+
 -- 加载lua lsp配置
 require('lsp/lua')
 
@@ -8,4 +11,6 @@ require('lsp/pylsp')
 require('lsp/gopls')
 
 -- -- 加载clangd配置
--- require('lsp/clangd')
+if config.arch_is_x86 then
+    require('lsp/clangd')
+end

@@ -11,6 +11,6 @@ require('lsp/pylsp')
 require('lsp/gopls')
 
 -- -- 加载clangd配置
-if config.arch_is_x86 then
+if config.arch_is_x86 or config.is_darwin then
     require('lsp/clangd')
 end

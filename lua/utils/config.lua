@@ -4,6 +4,7 @@ local conf = {}
 
 -- 操作系统
 conf.os_name = vim.loop.os_uname().sysname
+conf.is_darwin = conf.os_name:lower():find('darwin') ~= nil
 conf.is_windows = conf.os_name:lower():find('windows') ~= nil
 conf.is_unix_like = not conf.is_windows
 

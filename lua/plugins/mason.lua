@@ -2,7 +2,7 @@
 local config = require('utils/config')
 
 local lsp_plugins = {'lua_ls', "pylsp", "gopls"}
-if config.arch_is_x86 then
+if config.arch_is_x86 or config.is_darwin then
     table.insert(lsp_plugins, 'clangd')
 else -- if config.arch_is_arm then
     -- arm不支持clangd

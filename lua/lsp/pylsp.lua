@@ -5,7 +5,7 @@
 -- How to use setup({}): https://github.com/neovim/nvim-lspconfig/wiki/Understanding-setup-%7B%7D
 --     - the settings table is sent to the LSP
 --     - on_attach: a lua callback function to run after LSP atteches to a given buffer
-local lspconfig = require('lspconfig')
+-- local lspconfig = require('lspconfig')
 
 -- Customized on_attach function
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -58,6 +58,6 @@ local on_attach = function(client, bufnr)
   })
 end
 
-lspconfig.pylsp.setup({
+vim.lsp.config("pylsp", {
     on_attach = on_attach,
 })

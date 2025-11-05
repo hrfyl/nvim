@@ -1,5 +1,5 @@
 -- golsp configure
 
-require('lspconfig').gopls.setup({
+vim.lsp.config('lspconfig', {
 
 })

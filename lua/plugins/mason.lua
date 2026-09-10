@@ -4,8 +4,8 @@ local config = require('utils/config')
 -- lua_ls / pylsp：所有平台默认安装
 local lsp_plugins = {'lua_ls', "pylsp"}
 
--- clangd：仅 x86 平台（Windows / macOS / Linux），ARM 平台暂不支持 clangd
-if config.arch_is_x86 then
+-- clangd：x86 全平台 + macOS 任意架构（判据须与 lua/lsp/setup.lua 保持一致）
+if config.arch_is_x86 or config.is_darwin then
     table.insert(lsp_plugins, 'clangd')
 end
 

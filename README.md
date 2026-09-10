@@ -75,7 +75,7 @@ nvim
 
 - `lua_ls` —— Lua（编辑本配置时自动生效）
 - `pylsp` —— Python
-- `clangd` —— C/C++，**仅 x86 平台**（Windows / macOS / Linux），ARM 上 clangd 尚不可用
+- `clangd` —— C/C++，**x86 全平台 + macOS 全架构**。Apple Silicon 上可继续用系统自带的 `/usr/bin/clangd`（Command Line Tools 提供），无需额外安装；仅 Linux / Windows 的 ARM 不加载
 
 需要 Go 支持时（`gopls` 各平台默认都不安装也不加载）：
 
@@ -110,7 +110,7 @@ lua/
 │   ├── setup.lua     -- LSP 加载入口与平台门控
 │   ├── lua.lua       -- lua_ls
 │   ├── pylsp.lua     -- pylsp，同时定义了 LSP 通用的缓冲区键位
-│   ├── clangd.lua    -- clangd（仅 x86）
+│   ├── clangd.lua    -- clangd（x86 与 macOS）
 │   └── gopls.lua     -- gopls（默认不加载）
 ├── dap/setup.lua     -- 预留占位
 ├── utils/
@@ -206,9 +206,9 @@ LSP 键位在 `lua/lsp/pylsp.lua` 的 `on_attach` 中注册，打开对应语言
 
 1. **Windows 的配置目录与 macOS/Linux 不同。** Neovim 在 Windows 上把 `stdpath("config")` 解析为 `%LOCALAPPDATA%\nvim`，数据目录为 `%LOCALAPPDATA%\nvim-data`。本仓库当前的做法是让配置目录成为一个指向 `~/.config/nvim` 的符号链接——所以**编辑这个仓库即编辑生效配置**，不要被两个路径绕晕。
 
-2. **`lazy-lock.json` 未纳入版本控制。** 它被 `.gitignore` 忽略，clone 之后没有版本锁定，不同机器上的插件版本可能不一致。需要对齐时用 `:Lazy restore`，或自行维护该文件。
+2. **`lazy-lock.json` 已纳入版本控制。** `.gitignore` 末尾虽然列了它，但文件早已被 git 跟踪，该条目对其无效。clone 之后插件版本即由它锁定，不会因机器不同而不一致；更新插件后应连同它的改动一起提交。需要对齐到某个版本时用 `:Lazy restore`。
 
-3. **LSP 按平台门控**（判据在 `lua/utils/config.lua`）：`lua_ls` / `pylsp` 全平台默认加载；`clangd` 只在 x86 平台加载，ARM 上不仅不加载、还会显式禁用——以避免 mason 目录里存在历史残留时被自动启用；`gopls` 各平台默认都不加载。
+3. **LSP 按平台门控**（判据在 `lua/utils/config.lua`）：`lua_ls` / `pylsp` 全平台默认加载；`clangd` 在 x86 全平台与 macOS 全架构加载（Apple Silicon 上用系统的 `/usr/bin/clangd` 即可，mason 也会按 `ensure_installed` 装一份），仅 Linux / Windows 的 ARM 上不加载、并在 `lua/lsp/setup.lua` 里显式 `vim.lsp.enable('clangd', false)`——以避免 mason 目录里存在历史残留时被自动启用；`gopls` 各平台默认都不加载。
 
 4. **treesitter 高亮依赖 tree-sitter CLI。** 没装 CLI 时启动会有一条提示，parser 不会被安装；装上之后可用 `:TSInstall <语言>` 补装，支持的语言列表见 `lua/plugins/nvim-treesitter.lua` 顶部。超过 100 KB 的文件会跳过 treesitter 高亮以免卡顿。
 

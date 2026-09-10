@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 概述
 
-个人 Neovim 配置（纯 Lua），需同时运行在 **Windows 10+、macOS、Linux（x86_64 / arm64）** 上，插件由 lazy.nvim 管理。仓库没有测试、lint 或 CI —— 验证改动的唯一方式是让 nvim 实际加载它。注释与提交信息使用中文，提交信息带 `[CHG]` / `[ADD]` 前缀。
+个人 Neovim 配置（纯 Lua），需同时运行在 **Windows 10+、macOS、Linux（x86_64 / arm64）** 上，插件由 lazy.nvim 管理。要求 **Neovim >= 0.11**（当前开发环境 0.12.5）：配置用的是 0.11 起的 `vim.lsp.config()` / `vim.lsp.enable()` API，更低版本无法工作。仓库没有测试、lint 或 CI —— 验证改动的唯一方式是让 nvim 实际加载它。注释与提交信息使用中文，提交信息带 `[CHG]` / `[ADD]` 前缀。
 
 ## 常用命令
 
-以下命令在仓库根目录、Git Bash 下执行：
+以下命令在仓库根目录执行（Windows 上用 Git Bash，mac/Linux 用本机 shell）：
 
 | 目的 | 命令 |
 |---|---|
@@ -24,7 +24,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `init.lua` 按固定顺序 require 各模块：`basic` → `lazynvim` → `keybindings` → `autocmds` → `colorscheme` → `lsp/setup` → `dap/setup` → `utils/setup`。新增顶层模块需在此登记。
 
-`lua/lazynvim.lua` 先自举 lazy.nvim（缺失时 git clone 到 `stdpath("data")/lazy/lazy.nvim`），再用 `require("lazy").setup("plugins", ...)` 自动导入 `lua/plugins/` 下的所有文件 —— **新增插件只需在该目录加一个 `return {...}` 的文件，不必手动注册**。lockfile 固定为 `stdpath("config")/lazy-lock.json`。
+`lua/lazynvim.lua` 先自举 lazy.nvim（缺失时 git clone 到 `stdpath("data")/lazy/lazy.nvim`），再用 `require("lazy").setup("plugins", ...)` 自动导入 `lua/plugins/` 下的所有文件 —— **新增插件只需在该目录加一个 `return {...}` 的文件，不必手动注册**。lockfile 固定为 `stdpath("config")/lazy-lock.json`，即仓库根目录的 `lazy-lock.json`。
 
 注意：Windows 上 `stdpath("config")` 解析为 `~/AppData/Local/nvim`，该路径是指向本仓库 `~/.config/nvim` 的 SymbolicLink。编辑本仓库即编辑生效配置，不要被路径差异误导。
 
@@ -32,9 +32,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 这份配置要**同时在 Windows 10+、macOS、Linux（x86_64 与 arm64）上使用**，且是多台机器共用的同一份仓库。改动任何逻辑时都必须考虑其余平台，不要引入只在当前平台上成立的假设——例如硬编码绝对路径、平台专属的 shell 命令或可执行文件名、写死的路径分隔符、假定某个外部工具一定存在。依赖外部程序时用 `vim.fn.executable()` 之类的运行时检测（见 `lua/plugins/nvim-treesitter.lua` 对 `tree-sitter` CLI 的处理），不要按平台硬编码；需要区分平台时用下面的信息表。
 
-`lua/utils/config.lua` 返回平台信息表（`is_darwin`、`is_windows`、`is_unix_like`、`arch_is_x86`、`arch_is_arm`），是条件加载的唯一来源。当前 LSP 门控规则：**`lua_ls` / `pylsp` 全平台默认加载；`clangd` 仅 `arch_is_x86` 平台启用（Windows / macOS / Linux，ARM 上 clangd 不可用）；`gopls` 全平台默认不加载**，需要 Go 支持时由用户自行安装（`:Mason` 或 `go install golang.org/x/tools/gopls@latest`）后取消 `lua/lsp/setup.lua` 中 `require('lsp/gopls')` 的注释。改语言工具链时 `lua/lsp/setup.lua`（管启用）与 `lua/plugins/mason.lua`（管安装）必须同步改。
+`lua/utils/config.lua` 返回平台信息表（`is_darwin`、`is_windows`、`is_unix_like`、`arch_is_x86`、`arch_is_arm`），是条件加载的唯一来源。当前 LSP 门控规则：**`lua_ls` / `pylsp` 全平台默认加载；`clangd` 在 `arch_is_x86 or is_darwin` 时启用——即 x86 全平台 + macOS 全架构，只有 Linux / Windows 的 ARM 不加载**（早先「ARM 上 clangd 不可用」的说法对 macOS 不成立：Apple Silicon 上 `/usr/bin/clangd` 由 Command Line Tools 提供，mason 也有 darwin-arm64 构建）；**`gopls` 全平台默认不加载**，需要 Go 支持时由用户自行安装（`:Mason` 或 `go install golang.org/x/tools/gopls@latest`）后取消 `lua/lsp/setup.lua` 中 `require('lsp/gopls')` 的注释。改语言工具链时 `lua/lsp/setup.lua`（管启用）与 `lua/plugins/mason.lua`（管安装）必须同步改。
 
-ARM 侧的 `clangd` 需要在 `lsp/setup.lua` 里显式 `vim.lsp.enable('clangd', false)`：mason-lspconfig 的 `automatic_enable` 不看平台，会遍历 mason 本地已装的包自动启用（迁移、共享 mason 目录时最容易踩到）。`init.lua` 把 `lsp/setup` 排在 `lazynvim` 之后，正是为了让这一行能覆盖它——调整 require 顺序时不要破坏这个前提。
+Linux / Windows ARM 侧的 `clangd` 需要在 `lsp/setup.lua` 里显式 `vim.lsp.enable('clangd', false)`：mason-lspconfig 的 `automatic_enable` 不看平台，会遍历 mason 本地已装的包自动启用（迁移、共享 mason 目录时最容易踩到）。`init.lua` 把 `lsp/setup` 排在 `lazynvim` 之后，正是为了让这一行能覆盖它——调整 require 顺序时不要破坏这个前提。
+
+反过来，**要启用某个 server 也不能只靠 `automatic_enable`**：它只覆盖经 mason 安装的包，系统自带或 `go install` 装的二进制不在其列。所以 `lua/lsp/clangd.lua` 与 `lua/lsp/gopls.lua` 都在 `vim.lsp.config(<name>, {...})` 之后额外写了 `vim.lsp.enable(<name>)`——前者只注册配置、不启动 server，漏掉这行会表现为「门控明明放开了，server 却始终不 attach」。
 
 配置目录本身也是平台相关的：mac/Linux 上 `stdpath("config")` 就是 `~/.config/nvim`；当前这台 Windows 机器上它解析为 `~/AppData/Local/nvim`，且是指向本仓库的 SymbolicLink。引用配置目录时一律走 `vim.fn.stdpath("config")`，不要写死路径。
 
@@ -53,8 +55,9 @@ ARM 侧的 `clangd` 需要在 `lsp/setup.lua` 里显式 `vim.lsp.enable('clangd'
 - **插件 spec**：一个文件可 `return` 单个 spec（`nvim-tree.lua`）或 spec 数组（`nvim-cmp.lua`）。配置有 `opts` 声明式与 `config = function()` 命令式两种，仓库内混用。
 - **treesitter**：插件跟随重写后的 `main` 分支，已无 `configs` 模块，高亮由 `lua/plugins/nvim-treesitter.lua` 里的 `FileType` autocmd 调 `vim.treesitter.start()` 完成（无 parser 时需靠 `vim.treesitter.language.add()` 守卫，否则 `start()` 内的 assert 会抛错）。新增语言时把语言名加进该文件的 `languages` 列表；装 parser 需先有 `tree-sitter` CLI（>=0.26.1），再用 `:TSInstall`。
 - **启动时序陷阱（重要）**：`nvim <文件>` 启动时，FileType 在 `basic.lua` 的 `filetype plugin indent on` 就已触发，早于 `lazynvim` 加载的所有插件——此刻 `vim_did_enter` 与 `did_filetype()` 均为 0（实测）。因此**注册在插件 config 里的 FileType autocmd 会完全错过启动文件**。凡是依赖 FileType 的配置都必须额外补处理一次，目前有两处：`lua/plugins/nvim-treesitter.lua` 在注册 autocmd 后遍历已加载 buffer，`lua/lsp/setup.lua` 末尾执行 `doautoall 'nvim.lsp.enable FileType'`（替代 nvim 内置补处理，后者因条件不满足而被跳过，表现为 `nvim <文件>` 时 LSP 完全不 attach）。改动这两处时不要删掉。
-- `lua/autocmds.lua`、`lua/dap/setup.lua`、`lua/utils/setup.lua` 目前是空占位，其 `require` 是为了预留加载点。
-- `lazy-lock.json` 被 `.gitignore` 忽略且未纳入版本控制，clone 后没有版本锁定。
+- `lua/autocmds.lua`、`lua/dap/setup.lua`、`lua/utils/setup.lua` 是空占位（0–1 行），其 `require` 只是为了预留加载点。`lua/lsp/gopls.lua` 同属惰性文件：它在 `lsp/setup.lua` 里的 `require` 被注释掉，默认不生效，改写它之前先确认那一行是否已取消注释。
+- `lazy-lock.json` **已被 git 跟踪**（`git ls-files` 可见，由 `[ADD] add lazy-lock.json` 提交加入），clone 后即按它锁定插件版本。`.gitignore` 末尾那条 `lazy-lock.json` 对已跟踪文件无效，容易误导——更新插件后 `lazy-lock.json` 会变脏，应连同改动一起提交。
+- `lua/colorscheme.lua` 有一处遗留缺陷：`<leader>fk` / `<leader>fj` 调用的是 `ResetGuiFont(1)` / `ResetGuiFont(-1)`，但 `ResetGuiFont` 不接受参数，因此这两个键实际只重置字号、不会增减；真正的 `ResizeGuiFont(delta)` 反而无人调用。改这个文件时若想修好，把两个回调换成 `ResizeGuiFont`。
 
 ## 外部依赖
 

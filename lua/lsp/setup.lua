@@ -5,12 +5,15 @@ local config = require('utils/config')
 require('lsp/lua')
 require('lsp/pylsp')
 
--- clangd：仅 x86 平台（Windows / macOS / Linux），ARM 平台暂不支持 clangd
-if config.arch_is_x86 then
+-- clangd：x86 全平台，以及 macOS 的任意架构。
+-- Apple Silicon 上 clangd 完全可用（/usr/bin/clangd 由 Command Line Tools 提供，
+-- mason 也有 darwin-arm64 构建），早先「ARM 上 clangd 不可用」的判断对 macOS 不成立。
+-- 仅 Linux / Windows 的 ARM 仍然不加载。判据须与 lua/plugins/mason.lua 同步。
+if config.arch_is_x86 or config.is_darwin then
     require('lsp/clangd')
 else
-    -- ARM 上显式禁用：mason-lspconfig 的 automatic_enable 会遍历 mason 本地
-    -- 已装的包自动启用，若 mason 目录里残留 clangd 包仍会被启用并启动失败。
+    -- Linux / Windows ARM 上显式禁用：mason-lspconfig 的 automatic_enable 会遍历
+    -- mason 本地已装的包自动启用，若 mason 目录里残留 clangd 包仍会被启用并启动失败。
     -- 本行在 init.lua 中排在 lazynvim 之后，能覆盖 automatic_enable 的结果。
     vim.lsp.enable('clangd', false)
 end

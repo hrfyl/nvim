@@ -1,13 +1,17 @@
 -- load configure
 local config = require('utils/config')
 
-local lsp_plugins = {'lua_ls', "pylsp", "gopls"}
-if config.arch_is_x86 or config.is_darwin then
+-- lua_ls / pylsp：所有平台默认安装
+local lsp_plugins = {'lua_ls', "pylsp"}
+
+-- clangd：仅 x86 平台（Windows / macOS / Linux），ARM 平台暂不支持 clangd
+if config.arch_is_x86 then
     table.insert(lsp_plugins, 'clangd')
-else -- if config.arch_is_arm then
-    -- arm不支持clangd
-    -- table.insert(lsp_plugins, 'clangd')
 end
+
+-- gopls：默认不安装。需要时自行安装（:Mason，或 go install golang.org/x/tools/gopls@latest），
+-- 并取消 lua/lsp/setup.lua 中 require('lsp/gopls') 的注释
+-- table.insert(lsp_plugins, 'gopls')
 
 -- mason
 return {
@@ -153,27 +157,9 @@ return {
     'williamboman/mason-lspconfig.nvim',
     opts = {
       -- A list of servers to automatically install if they're not already installed. Example: { "rust_analyzer@nightly", "lua_ls" }
-      -- This setting has no relation with the `automatic_installation` setting.
       ---@type string[]
       ensure_installed = lsp_plugins,
       -- ensure_installed = { "lua_ls", "clangd", "pylsp", "gopls"},
-
-      -- Whether servers that are set up (via lspconfig) should be automatically installed if they're not already installed.
-      -- This setting has no relation with the `ensure_installed` setting.
-      -- Can either be:
-      --   - false: Servers are not automatically installed.
-      --   - true: All servers set up via lspconfig are automatically installed.
-      --   - { exclude: string[] }: All servers set up via lspconfig, except the ones provided in the list, are automatically installed.
-      --       Example: automatic_installation = { exclude = { "rust_analyzer", "solargraph" } }
-      ---@type boolean
-      automatic_installation = false,
-      -- automatic_installation = {
-      --   exclude = { "clangd", "gopls" }
-      -- },
-
-      -- See `:h mason-lspconfig.setup_handlers()`
-      ---@type table<string, fun(server_name: string)>?
-      handlers = nil,
     },
   },
   { -- neovim/nvim-lspconfig

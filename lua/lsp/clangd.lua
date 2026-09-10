@@ -1,5 +1,5 @@
 -- clangd configure
 
-vim.lsp.config('lspconfig', {
+vim.lsp.config('clangd', {
 
 })
